@@ -44,6 +44,28 @@ User-Agent: Mozilla/5.0
 Accept: text/html
 ```
 
+exemplo com método GET
+
+```http
+POST /api/login HTTP/1.1
+Host: www.exemplo.com
+Content-Type: application/json
+Content-Length: 53
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+User-Agent: MeuClienteHTTP/1.0
+Accept: application/json
+
+{
+  "usuario": "joao",
+  "senha": "minhaSenha123"
+}
+
+```
+exemplo com método POST
+
+
+
+
 ### 🔐 Exemplo de Requisição com `Authorization`
 
 ```http
@@ -81,6 +103,11 @@ Server: nginx/1.18.0
 O cabeçalho Server informa qual software está sendo usado no servidor web — neste caso, nginx.
 
 ---
+
+## Entendendo o Cabeçalho do Protocolo HTTP/2
+
+
+
 
 
 
