@@ -169,7 +169,55 @@ O cabeçalho no protocolo **HTTP/2** funciona de forma diferente do HTTP/1.1, co
 - **Mais segurança**: compressão feita de forma segura (evita ataques como CRIME).
 - **Mais performance**: ideal para conexões móveis e redes lentas.
 
+---
 
+### o http 1.1 não possui cabeçalhos em frames?
+
+Não, o HTTP/1.1 não utiliza frames para transmitir cabeçalhos ou dados. Aqui está a diferença fundamental:
+
+📜 HTTP/1.1: Texto Plano
+O protocolo é baseado em texto puro.
+
+Cada requisição e resposta é composta por:
+
+Uma linha de início (ex: GET /index.html HTTP/1.1)
+Um conjunto de cabeçalhos (ex: Host: exemplo.com)
+Um corpo opcional (ex: HTML, JSON, etc.)
+Os cabeçalhos são enviados como linhas de texto, uma por linha, seguidas por uma linha em branco (\r\n) que indica o fim dos cabeçalhos.
+
+🧱 HTTP/2: Frames Binários
+HTTP/2 é um protocolo binário, não textual.
+Toda a comunicação é dividida em frames, que são unidades estruturadas de dados.
+Os cabeçalhos são enviados em frames do tipo HEADERS, e podem ser divididos em múltiplos frames se forem grandes.
+Além disso, os cabeçalhos são comprimidos com HPACK, o que não existe no HTTP/1.1
+
+### O que é um protocolo binário, não textual?
+
+📄 Protocolo Textual (como HTTP/1.1)
+Usa texto legível por humanos para se comunicar.
+
+Cada parte da requisição ou resposta é uma linha de texto.
+
+Exemplo de uma requisição HTTP/1.1:
+
+GET /index.html HTTP/1.1
+Host: www.exemplo.com
+User-Agent: Mozilla/5.0
+Fácil de ler e depurar com ferramentas simples (como telnet ou curl).
+
+Porém, ineficiente em termos de tamanho e velocidade de processamento.
+
+🧱 Protocolo Binário (como HTTP/2)
+Usa dados codificados em binário (sequências de 0s e 1s).
+
+Não é legível diretamente por humanos.
+
+Mais eficiente para máquinas processarem:
+
+Menor tamanho de mensagem.
+Parsing mais rápido.
+Estrutura mais clara e rígida.
+Exemplo: em vez de enviar "GET" como texto, o protocolo pode representar isso como um código binário curto, como 0x01.
 
 
 
