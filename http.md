@@ -106,9 +106,68 @@ O cabeçalho Server informa qual software está sendo usado no servidor web — 
 
 ## Entendendo o Cabeçalho do Protocolo HTTP/2
 
+O HTTP/2 é uma evolução do protocolo HTTP/1.1, projetado para tornar a comunicação entre navegadores e servidores mais rápida, eficiente e segura. Ele foi padronizado em 2015 pela IETF como RFC 7540. Aqui estão os principais conceitos e como ele funciona:
 
+🔑 Principais Características do HTTP/2
+Multiplexação
 
+Permite múltiplas requisições e respostas simultâneas sobre uma única conexão TCP.
+Evita o problema de "head-of-line blocking" do HTTP/1.1, onde uma requisição lenta bloqueava as demais.
+Compressão de Cabeçalhos (HPACK)
 
+Os cabeçalhos HTTP são comprimidos, reduzindo o volume de dados transmitidos.
+Isso é especialmente útil para APIs e sites com muitos cookies ou cabeçalhos repetitivos.
+Server Push
+
+O servidor pode enviar recursos (como CSS, JS) antes mesmo de o cliente pedir, antecipando o que será necessário.
+Isso reduz o tempo de carregamento de páginas.
+Prioritização de Requisições
+
+O cliente pode informar ao servidor quais recursos são mais importantes.
+O servidor pode usar essa informação para otimizar a ordem de envio.
+Binário, não texto
+
+HTTP/2 usa um protocolo binário em vez de texto puro, como no HTTP/1.1.
+Isso torna o parsing mais eficiente e menos sujeito a erros.
+
+## Funcionamento dos Cabeçalhos no HTTP/2
+
+O cabeçalho no protocolo **HTTP/2** funciona de forma diferente do HTTP/1.1, com foco em **eficiência e compactação**.
+
+---
+
+### 🧱 Estrutura dos Cabeçalhos no HTTP/2
+
+1. **Frames de Cabeçalho (`HEADERS`)**
+   - Em HTTP/2, os cabeçalhos são enviados em **frames binários** chamados `HEADERS`.
+   - Cada frame pertence a um **stream** (uma requisição ou resposta específica).
+
+2. **Compactação com HPACK**
+   - HTTP/2 usa um algoritmo chamado **HPACK** para comprimir os cabeçalhos.
+   - Ele reduz drasticamente o tamanho dos dados transmitidos, especialmente quando há cabeçalhos repetidos (como `User-Agent`, `Cookie`, etc.).
+
+3. **Tabela de Cabeçalhos Dinâmica**
+   - Tanto o cliente quanto o servidor mantêm uma **tabela dinâmica compartilhada** de cabeçalhos já usados.
+   - Em vez de reenviar o mesmo cabeçalho, eles podem apenas referenciar a entrada na tabela.
+
+4. **Cabeçalhos Pseudo (`:method`, `:path`, `:authority`, `:scheme`)**
+   - HTTP/2 introduz **pseudo-cabeçalhos**, que substituem partes da linha de requisição do HTTP/1.1.
+   - Exemplo:
+
+     ```
+     :method: GET
+     :path: /index.html
+     :scheme: https
+     :authority: www.exemplo.com
+     ```
+
+---
+
+### ✅ Vantagens
+
+- **Menor latência**: menos dados transmitidos.
+- **Mais segurança**: compressão feita de forma segura (evita ataques como CRIME).
+- **Mais performance**: ideal para conexões móveis e redes lentas.
 
 
 
