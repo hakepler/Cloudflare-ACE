@@ -198,25 +198,8 @@ or use several variables like:
 
 	curl -X POST https://exemplo.com/api/login -H "Content-Type: application/x-www-form-urlencoded" -d "username=joao&password=123456"
 
-	X POST: Define o método HTTP como POST.  
+	-X POST: Define o método HTTP como POST.  
  	O parâmetro -X no comando curl é usado para especificar um proxy pelo qual a requisição HTTP deve passar.	curl -X http://proxy.exemplo.com:8080 https://api.exemplo.com/dados
 	-H "Content-Type: application/x-www-form-urlencoded": Define o tipo de conteúdo como formulário.
 	-d "username=joao&password=123456": Envia os dados do formulário no corpo da requisição. ---> O parâmetro -d ou --data no curl é usado para enviar dados em uma requisição HTTP, geralmente do tipo POST.
  
-	
-		
-				
-    	
-				 
-	
-				 
-					
-
-
-		
-		
-		
-		
-		
-	
-curl --head 52.191.5.18
