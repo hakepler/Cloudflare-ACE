@@ -12,10 +12,13 @@ Accept: */*
 ```
 Explicação:
 
+
 | GET / HTTP/1.1 | Método HTTP GET para o caminho / usando a versão HTTP/1.1 |
 | Host: www.google.com | Indica o domínio do servidor de destino |
 | User-Agent: curl/7.XX.X | Identifica o cliente como curl com sua versão |
 | Accept: */* |	Informa que o cliente aceita qualquer tipo de conteúdo como resposta |
+
+
 
 
 ## Comando para ver cabeçalhos de resposta: curl -i https://www.google.com
