@@ -1,5 +1,9 @@
 # O Comando CURL
 
+## Mostra a versão do curl:
+			
+	curl -V
+
 ## O cabeçalho de envio de um comando curl, exemplo: curl -i https://www.google.com
 
 O curl envia uma requisição HTTP GET para o servidor do Google. O cabeçalho de envio (requisição) padrão do curl inclui alguns campos básicos. Aqui está um exemplo típico do cabeçalho de requisição HTTP que o curl envia:
@@ -62,97 +66,157 @@ Você pode adicionar cabeçalhos personalizados com a opção -H, por exemplo:
     Transfer-Encoding: chunked                  --> O corpo da resposta será enviado em blocos (chunks), útil para streaming de dados.
 
  
-Baixar um arquivo:
+## Baixar um arquivo:
 			
 	curl -O https://exemplo.com/arquivo.zip
 	
-Mostra a versão do curl:
-			
-	curl -V
 
-Para verificar se TLS 1.3 está realmente funcionando, você pode testar com um site que suporte esse protocolo:
+
+## Para verificar se TLS 1.3 está realmente funcionando, você pode testar com um site que suporte esse protocolo:
 			
 	curl --tlsv1.3 https://www.cloudflare.com
 	
-Forçar o uso de TLS 1.2 (se TLS 1.3 não for suportado)
+## Forçar o uso de TLS 1.2 (se TLS 1.3 não for suportado)
 			
 	curl --tlsv1.2 https://www.cloudflare.com
 	
-Site com problema de certificado: 
+## Site com problema de certificado: 
 			
 	curl: (60) SSL certificate problem: unable to get local issuer certificate
 	
-		Vc pode testar no certificado do google por exemplo utilizando o certificado do curl: 
+Vc pode testar no certificado do google por exemplo utilizando o certificado do curl: 
 			
-		curl --cacert "C:\curl\cacert.pem" https://www.google.com
+	curl --cacert "C:\curl\cacert.pem" https://www.google.com
+
+---
+## Para desabilitar certificado (confiando em site inseguro): 
+				
+	curl -k https://portal.stf.jus.br/
+					
+### Se retornar erro 403: 
+					
+Esse erro 403 Forbidden significa que o servidor do site bloqueou a requisição feita pelo curl, mesmo que o site funcione normalmente no navegador.
+
+Isso acontece porque muitos sites verificam o "User-Agent" (identificador do cliente) e bloqueiam acessos automatizados que não parecem vir de navegadores reais.:
+					
+### Você pode adicionar um cabeçalho User-Agent para que o curl se identifique como um navegador comum:
+					
+	curl -k -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" https://portal.stf.jus.br/
+
+ ---
+			
+## Comando curl para visualizar o handshake: 
+
+	curl -svo /dev/null https://jamieede.com
+
+Esse comando realiza uma requisição HTTP para https://jamieede.com, descarta o conteúdo da resposta, mas exibe os cabeçalhos e detalhes da conexão (por causa do -v). O -s evita que o progresso da transferência seja exibido, deixando a saída mais limpa: 
+
+
+	* Host jamieede.com:443 was resolved.
+	* IPv6: (none)
+	* IPv4: 172.66.43.100, 172.66.40.156
+	*   Trying 172.66.43.100:443...
+	* ALPN: curl offers h2,http/1.1
+	* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+	} [307 bytes data]
+	*  CAfile: C:\curl\cacert.pem
+	*  CApath: none
+	* TLSv1.3 (IN), TLS handshake, Server hello (2):
+	{ [122 bytes data]
+	* TLSv1.3 (IN), TLS handshake, Unknown (8):
+	{ [19 bytes data]
+	* TLSv1.3 (IN), TLS handshake, Certificate (11):
+	{ [2517 bytes data]
+	* TLSv1.3 (IN), TLS handshake, CERT verify (15):
+	{ [78 bytes data]
+	* TLSv1.3 (IN), TLS handshake, Finished (20):
+	{ [52 bytes data]
+	* TLSv1.3 (OUT), TLS handshake, Finished (20):
+	} [52 bytes data]
+	* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384 / [blank] / UNDEF
+	* ALPN: server accepted h2
+	* Server certificate:
+	*  subject: CN=jamieede.com
+	*  start date: Jun  3 04:52:17 2025 GMT
+	*  expire date: Sep  1 05:52:12 2025 GMT
+	*  subjectAltName: host "jamieede.com" matched cert's "jamieede.com"
+	*  issuer: C=US; O=Google Trust Services; CN=WE1
+	*  SSL certificate verify ok.
+	*   Certificate level 0: Public key type ? (256/128 Bits/secBits), signed using ecdsa-with-SHA256
+	*   Certificate level 1: Public key type ? (256/128 Bits/secBits), signed using ecdsa-with-SHA384
+	*   Certificate level 2: Public key type ? (384/192 Bits/secBits), signed using ecdsa-with-SHA384
+	* Connected to jamieede.com (172.66.43.100) port 443
+	* using HTTP/2
+	* [HTTP/2] [1] OPENED stream for https://jamieede.com/
+	* [HTTP/2] [1] [:method: GET]
+	* [HTTP/2] [1] [:scheme: https]
+	* [HTTP/2] [1] [:authority: jamieede.com]
+	* [HTTP/2] [1] [:path: /]
+	* [HTTP/2] [1] [user-agent: curl/8.14.1]
+	* [HTTP/2] [1] [accept: */*]
+	> GET / HTTP/2
+	> Host: jamieede.com
+	> User-Agent: curl/8.14.1
+	> Accept: */*
+	>
+	* Request completely sent off
+	< HTTP/2 403
+	< date: Wed, 02 Jul 2025 23:30:08 GMT
+	< content-type: text/html; charset=UTF-8
+	< x-frame-options: SAMEORIGIN
+	< referrer-policy: same-origin
+	< cache-control: private, max-age=0, no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+	< expires: Thu, 01 Jan 1970 00:00:01 GMT
+	< strict-transport-security: max-age=15552000; includeSubDomains
+	< x-content-type-options: nosniff
+	< server: cloudflare
+	< cf-ray: 9591ede37d7a4d41-GRU
+	< alt-svc: h3=":443"; ma=86400
+	<
+	{ [1360 bytes data]
+	* client returned ERROR on write of 1360 bytes
+	* Connection #0 to host jamieede.com left intact
+
+ 	
+			
+-s, --silent ---> -s: modo "silent" (silencioso). Suprime o progresso e mensagens de erro.
+				
+-v, --verbose ---> Makes  the  fetching more verbose/talkative. Mostly useful for debugging. A line starting with '>' means "header data" sent by curl, '<' means "header data" received  by  curl  that  is  hidden  in normal cases, and a line starting with '*' means additional info provided by curl.
+              ---> o  modo "verbose". Mostra detalhes da comunicação com o servidor, como cabeçalhos de requisição e resposta.
+				
+-o, --output <file> ---> -o /dev/null: redireciona o corpo da resposta para o "buraco negro" do sistema, ou seja, descarta o conteúdo da página. Write  output  to <file> instead of stdout. If you are using {} or [] to fetch multiple documents, you can use '#' followed by a number in the <file> specifier. That variable will be replaced  with the current string for the URL being fetched. Like in:
+
+	curl http://{one,two}.site.com -o "file_#1.txt"
+
+or use several variables like:
+
+	curl http://{site,host}.host[1-5].com -o "#1_#2"
+
+ ---
+
+## Outros parâmetros para o uso do comando curl: 
+
+	curl -X POST https://exemplo.com/api/login -H "Content-Type: application/x-www-form-urlencoded" -d "username=joao&password=123456"
+
+	X POST: Define o método HTTP como POST.  
+ 	O parâmetro -X no comando curl é usado para especificar um proxy pelo qual a requisição HTTP deve passar.	curl -X http://proxy.exemplo.com:8080 https://api.exemplo.com/dados
+	-H "Content-Type: application/x-www-form-urlencoded": Define o tipo de conteúdo como formulário.
+	-d "username=joao&password=123456": Envia os dados do formulário no corpo da requisição. ---> O parâmetro -d ou --data no curl é usado para enviar dados em uma requisição HTTP, geralmente do tipo POST.
+ 
+	
 		
-	Para desabilitar a questão do certificado (confiando em site inseguro): 
 				
-		curl -k https://portal.stf.jus.br/
-					
-		Se retornar erro 403: 
-					
-			Esse erro 403 Forbidden significa que o servidor do site (neste caso, o do STF) bloqueou a requisição feita pelo curl, mesmo que o site funcione normalmente no navegador.
-
-			Isso acontece porque muitos sites verificam o "User-Agent" (identificador do cliente) e bloqueiam acessos automatizados que não parecem vir de navegadores reais.:
-					
-			Você pode adicionar um cabeçalho User-Agent para que o curl se identifique como um navegador comum:
-					
-			curl -k -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" https://portal.stf.jus.br/
-			
-Mais um exemplo de aplicação: 
-
-			curl(1) -svo /dev/null https://example.com -k
-			
-				-s, --silent
-				Silent or quiet mode. Don't show progress meter or error messages.  Makes Curl mute.
-				
-				-v, --verbose
-				Makes  the  fetching more verbose/talkative. Mostly useful for debugging. A line starting with '>'
-				means "header data" sent by curl, '<' means "header data" received  by  curl  that  is  hidden  in
-				normal cases, and a line starting with '*' means additional info provided by curl.
-				
-				-o, --output <file>
-			   Write  output  to <file> instead of stdout. If you are using {} or [] to fetch multiple documents,
-			   you can use '#' followed by a number in the <file> specifier. That variable will be replaced  with
-			   the current string for the URL being fetched. Like in:
-
-				 curl http://{one,two}.site.com -o "file_#1.txt"
-
-			   or use several variables like:
-
-				 curl http://{site,host}.host[1-5].com -o "#1_#2"
-
-			   You may use this option as many times as the number of URLs you have.
-			   
-			   -k, --insecure
-				(SSL)  This option explicitly allows curl to perform "insecure" SSL connections and transfers. All
-				SSL connections are attempted to be made secure by using the CA certificate  bundle  installed  by
-				default. This makes all connections considered "insecure" fail unless -k, --insecure is used.
-
-				See this online resource for further details: http://curl.haxx.se/docs/sslcerts.html
-				
-				- X
-				O parâmetro -x no comando curl é usado para especificar um proxy pelo qual a requisição HTTP deve passar.	
-				curl -x http://proxy.exemplo.com:8080 https://api.exemplo.com/dados
-				
-				-d --data 
-				
-				 O parâmetro -d no curl é usado para enviar dados em uma requisição HTTP, geralmente do tipo POST.
+    	
 				 
-				 curl -X POST https://exemplo.com/api/login -H "Content-Type: application/x-www-form-urlencoded" -d "username=joao&password=123456"
+	
 				 
-					X POST: Define o método HTTP como POST.
-					-H "Content-Type: application/x-www-form-urlencoded": Define o tipo de conteúdo como formulário.
-					-d "username=joao&password=123456": Envia os dados do formulário no corpo da requisição.
+					
 
-curl -svo /dev/null https://jamieede.com
 
-		-s: modo "silent" (silencioso). Suprime o progresso e mensagens de erro.
-		-v: modo "verbose". Mostra detalhes da comunicação com o servidor, como cabeçalhos de requisição e resposta.
-		-o /dev/null: redireciona o corpo da resposta para o "buraco negro" do sistema, ou seja, descarta o conteúdo da página.
 		
-		Ele realiza uma requisição HTTP para https://jamieede.com, descarta o conteúdo da resposta, mas exibe os cabeçalhos e detalhes da conexão (por causa do -v). 
-		O -s evita que o progresso da transferência seja exibido, deixando a saída mais limpa.
+		
+		
+		
+		
 	
 curl --head 52.191.5.18
