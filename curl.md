@@ -3,20 +3,13 @@
 ## O cabeçalho de envio de um comando curl: curl -i https://www.google.com
 
 	O curl envia uma requisição HTTP GET para o servidor do Google. O cabeçalho de envio (requisição) padrão do curl inclui alguns campos básicos. Aqui está um exemplo típico do cabeçalho de requisição HTTP que o curl envia:
-
-  	```http
-
-   	GET / HTTP/1.1
-	Host: www.google.com
-	User-Agent: curl/7.XX.X
-	Accept: */*
-
+  	
+	```http
+	   	GET / HTTP/1.1
+		Host: www.google.com
+		User-Agent: curl/7.XX.X
+		Accept: */*
  	```
-
-	
-
-
-
 
 ## Comando para ver cabeçalhos de resposta: curl -i https://www.google.com
 			
