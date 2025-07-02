@@ -10,15 +10,20 @@ Host: www.google.com
 User-Agent: curl/7.XX.X
 Accept: */*
 ```
-Explicação:
+### Explicação:
 
+| Linha       | Significado |
+|----------------|---------|
+| `GET / HTTP/1.1` | Método HTTP GET para o caminho / usando a versão HTTP/1.1 |
+| `Host: www.google.com` | Indica o domínio do servidor de destino |
+| `User-Agent: curl/7.XX.X` | Identifica o cliente como curl com sua versão |
+| `Accept: */*` | Informa que o cliente aceita qualquer tipo de conteúdo como resposta |
 
-| GET / HTTP/1.1 | Método HTTP GET para o caminho / usando a versão HTTP/1.1 |
-| Host: www.google.com | Indica o domínio do servidor de destino |
-| User-Agent: curl/7.XX.X | Identifica o cliente como curl com sua versão |
-| Accept: */* |	Informa que o cliente aceita qualquer tipo de conteúdo como resposta |
+🔧 Observações
+O curl envia apenas cabeçalhos básicos por padrão.
+Você pode adicionar cabeçalhos personalizados com a opção -H, por exemplo:
 
-
+	curl -i -H "Accept: application/json" https://www.google.com
 
 
 ## Comando para ver cabeçalhos de resposta: curl -i https://www.google.com
@@ -56,25 +61,7 @@ Explicação:
     Vary: Accept-Encoding                       --> O conteúdo pode variar dependendo do tipo de compressão aceito pelo cliente (gzip, br, etc.).
     Transfer-Encoding: chunked                  --> O corpo da resposta será enviado em blocos (chunks), útil para streaming de dados.
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-
+ 
 Baixar um arquivo:
 			
 	curl -O https://exemplo.com/arquivo.zip
