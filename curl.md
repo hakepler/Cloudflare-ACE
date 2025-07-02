@@ -1,6 +1,6 @@
 # O Comando CURL
 
-## O cabeçalho de envio de um comando curl: curl -i https://www.google.com
+## O cabeçalho de envio de um comando curl, exemplo: curl -i https://www.google.com
 
 O curl envia uma requisição HTTP GET para o servidor do Google. O cabeçalho de envio (requisição) padrão do curl inclui alguns campos básicos. Aqui está um exemplo típico do cabeçalho de requisição HTTP que o curl envia:
   	
