@@ -84,7 +84,7 @@ Você pode adicionar cabeçalhos personalizados com a opção -H, por exemplo:
 			
 	curl: (60) SSL certificate problem: unable to get local issuer certificate
 	
-Vc pode testar no certificado do google por exemplo utilizando o certificado do curl: 
+Você pode testar no certificado do google por exemplo utilizando o certificado do curl: 
 			
 	curl --cacert "C:\curl\cacert.pem" https://www.google.com
 
