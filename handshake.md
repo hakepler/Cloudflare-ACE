@@ -234,14 +234,23 @@ Lista de algoritmos de criptografia (cipher suites) que o cliente pode usar.
 Dados aleatórios (random bytes) usados para gerar chaves seguras.
 Extensões TLS, como o SNI (Server Name Indication), que informa ao servidor qual domínio o cliente quer acessar (útil em servidores com múltiplos domínios).
 Session ID (opcional), se o cliente quiser retomar uma sessão anterior.
-🔄 O que acontece depois?
-O servidor responde com um Server Hello, escolhendo os parâmetros de segurança.
-O servidor envia seu certificado digital.
-Ambos os lados trocam chaves e finalizam o handshake.
-A comunicação segura começa.
+
+📦 O que vai no ClientHello?
+Versão máxima do TLS suportada
+Número aleatório (Client Random)
+Usado na geração da chave de sessão.
+Lista de cipher suites suportadas
+Ex: TLS_AES_256_GCM_SHA384, TLS_CHACHA20_POLY1305_SHA256, etc.
+O cliente envia várias opções, em ordem de preferência.
+Métodos de compressão (hoje em dia quase sempre "null")
+Extensões TLS, como:
+SNI (Server Name Indication)
+ALPN (Application-Layer Protocol Negotiation)
+Session ID / Session Ticket
+E outras
 
 
- ### Session IDs 
+### Session IDs 
 
 In computer science, a session identifier, session ID or session token is a piece of data that is used in network communications (often over HTTP) to identify a session, a series of related message exchanges. 
 Session identifiers become necessary in cases where the communications infrastructure uses a stateless protocol such as HTTP. 
@@ -298,4 +307,117 @@ Eficiência: evita novo handshake completo.
 Escalabilidade: o servidor não precisa manter estado para cada cliente.
 Rapidez: retomada de sessão é mais rápida e consome menos recursos.
 
+### Server Name Indicator (SNI)
+
+Server Name Indication (SNI) is an extension to the Transport Layer Security (TLS) computer networking protocol by which a client indicates which hostname it is attempting to connect to at the start of the handshaking process. 
+This allows a server to present one of multiple possible certificates on the same IP address and TCP port number and hence allows multiple secure (HTTPS) websites (or any other service over TLS) to be served by the same 
+IP address without requiring all those sites to use the same certificate.
+	
+#### Explicando o SNI:
+Server Name Indication é uma extensão do protocolo TLS que permite ao cliente informar ao servidor o nome do host (domínio) que ele quer acessar logo no início do handshake TLS.
+Antes do SNI, quando um servidor recebia uma conexão TLS, ele não sabia qual certificado apresentar, porque o nome do site (como exemplo.com) só era revelado depois do handshake — mas o certificado precisa ser apresentado durante o handshake.
+
+Isso era um problema quando:
+Vários sites HTTPS estavam hospedados no mesmo IP e porta.
+Cada site precisava de um certificado diferente.
+	
+Com o SNI:
+
+O cliente envia o nome do host (ex: exemplo.com) logo no início do handshake.
+O servidor usa esse nome para escolher o certificado correto.
+A conexão TLS continua normalmente, com o certificado adequado.
+	
+🧪 Exemplo prático
+Imagine que você tem dois sites: site1.com e site2.com
+Ambos estão no mesmo servidor e IP, mas têm certificados diferentes.
+
+Sem SNI: o servidor não sabe qual certificado usar → erro de certificado.
+
+Com SNI: o cliente diz “quero site2.com” → o servidor apresenta o certificado de site2.com → tudo funciona.
+	
+O SNI não é criptografado no TLS 1.2, o que significa que terceiros podem ver qual site você está acessando.
+No TLS 1.3 com ESNI (Encrypted SNI), essa informação pode ser protegida — mas ainda não é amplamente adotado.
+
+### Application Layer Protocol Negotiation (ALPN)
+
+Application-Layer Protocol Negotiation (ALPN) is a Transport Layer Security (TLS) extension that allows the application layer (Layer 4) to negotiate which protocol should be performed over a secure connection in a manner that avoids additional round trips and which is independent of the application-layer protocols.
+
+#### Explicando o ALPN:
+
+ALPN é uma extensão do protocolo TLS que permite que o cliente e o servidor escolham qual protocolo de aplicação usar (como HTTP/1.1 ou HTTP/2) durante o handshake TLS, ou seja, antes da conexão segura ser estabelecida.
+	
+🧩 Por que isso é útil?
+Sem ALPN, o cliente e o servidor precisariam:
+
+Estabelecer a conexão TLS primeiro.
+Depois, negociar o protocolo de aplicação (como HTTP ou SPDY).
+Isso exigiria mais uma troca de mensagens (round trip), o que aumenta a latência.
+
+Com ALPN:
+
+O cliente já informa quais protocolos suporta durante o handshake TLS.
+O servidor escolhe um deles e responde.
+A negociação é feita sem custo adicional de tempo.
+	
+🔄 Como funciona o ALPN?
+	
+O cliente inicia o handshake TLS e envia uma lista de protocolos que suporta (ex: ["h2", "http/1.1"]).
+O servidor escolhe um protocolo da lista (ex: h2 para HTTP/2).
+O protocolo escolhido é usado imediatamente após o handshake.
+	
+🧪 Exemplo prático
+Você acessa um site moderno com curl ou navegador:
+
+O cliente oferece: h2, http/1.1
+O servidor responde: h2
+A conexão segura é estabelecida e o tráfego segue via HTTP/2
+	
+✅ Benefícios do ALPN
+Reduz latência: evita round trips extras.
+Melhora desempenho: especialmente em conexões HTTPS.
+Suporta múltiplos protocolos: como HTTP/2, HTTP/3, gRPC, etc.
+Independente do protocolo de aplicação: funciona com qualquer protocolo sobre TLS.
+
+## O que aparece e não aparece no hanshake TLS de um comando cURL: 
+
+### Client Hello (Início da conexão TLS)
+
+| Campo                                           | Visível?         | Observação                                                                 |
+|------------------------------------------------|------------------|----------------------------------------------------------------------------|
+| Versão máxima do TLS suportada                 | ✅ Sim           | TLSv1.3 (OUT), handshake mostra que o cliente está usando TLS 1.3.         |
+| Número aleatório                               | ❌ Não           | Não é exibido diretamente na saída do `curl -v`.                           |
+| Lista de cipher suites                         | ❌ Não           | Não aparece na saída padrão do curl, mas é enviada no ClientHello.        |
+| Métodos de compressão                          | ❌ Não           | Está no ClientHello, mas não é mostrado na saída.                          |
+| Session ID                                     | ❌ Não visível   | Pode estar presente, mas não é mostrado explicitamente.                    |
+| Session Ticket                                 | ❌ Não visível   | Pode ser usado, mas não aparece na saída.                                  |
+| SNI (Server Name Indication)                   | ✅ Sim (inferido)| Certificado retornado indica que o SNI foi enviado corretamente.           |
+| ALPN (Application-Layer Protocol Negotiation)  | ✅ Sim           | `curl` mostra ALPN: `h2`, `http/1.1` e o servidor aceitando `h2`.          |
+
+🔄 O que acontece depois?
+O servidor responde com um Server Hello, escolhendo os parâmetros de segurança.
+O servidor envia seu certificado digital.
+Ambos os lados trocam chaves e finalizam o handshake.
+A comunicação segura começa.
+
+---
+
+## Server Hello
+	
+After receiving the client hello, the server picks the parameters for the handshake going forward. The server then responds by choosing the following from the Client Hello: a protocol version, a random number, 
+a cipher suite, and a compression method. The server may enforce its own preference of cipher suite selection. The server sends the above choices, as well as its certificate to the client, followed by a message 
+that it is finished with the handshake negotiation.
+	
+	
+🔄 O servidor
+Escolhe a cipher suite que também suporta.
+Usa o Client Random + Server Random para gerar a chave de sessão.
+Responde com um ServerHello contendo:
+	
+ 	A cipher suite escolhida
+ 
+	Seu próprio número aleatório
+	
+ 	Seu certificado digital
+
+	E outras informações
 
