@@ -246,7 +246,7 @@ A comunicação segura começa.
 In computer science, a session identifier, session ID or session token is a piece of data that is used in network communications (often over HTTP) to identify a session, a series of related message exchanges. 
 Session identifiers become necessary in cases where the communications infrastructure uses a stateless protocol such as HTTP. 
 	
-Explicando Session IDs:
+#### Explicando Session IDs:
 Um Session ID (ou identificador de sessão) é um código único que um servidor gera e atribui a um cliente (como um navegador) para identificar uma sessão específica de comunicação.
 O protocolo HTTP, usado na web, é stateless — ou seja, não guarda memória entre uma requisição e outra. Cada vez que você acessa uma página, o servidor não sabe automaticamente quem você é ou o que você fez antes.
 É aí que entra o Session ID: ele cria uma “memória” temporária entre cliente e servidor.
@@ -277,9 +277,8 @@ When using session tickets, the TLS server stores its session-specific state in 
 The client resumes a TLS session by sending the session ticket to the server, and the server resumes the TLS session according to the session-specific state in the ticket. 
 The session ticket is encrypted and authenticated by the server, and the server verifies its validity before using its contents.
 	
-Explicando Session Tickets: 
-	
-	
+#### Explicando Session Tickets: 
+
 Session Tickets são uma forma de retomar uma sessão TLS anterior sem que o servidor precise guardar informações da sessão anterior em sua memória.
 	
 Como funciona o Session Tickets: 
