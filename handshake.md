@@ -1,7 +1,7 @@
 # Handshake
 
 
-## Processo de handshake TCP com o endereço jamieede.com (Wireshark):
+## Processo de handshake TCP com o endereço jamieede.com, após comando cURL (Wireshark):
 
 	"No.","Time","Source","Destination","Protocol","Length","Info"
 	"75","5.020590","192.168.100.40","192.168.100.1","DNS","72","Standard query 0x90f1 A jamieede.com"
