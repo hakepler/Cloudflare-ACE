@@ -219,8 +219,30 @@ O servidor aceitou usar HTTP/2, que é mais eficiente que HTTP/1.1.
 
 ---
 # Extensões TLS: 
-	
-| Session IDs |
+
+## Client Hello 
+
+O Client Hello é a primeira mensagem enviada por um cliente (como um navegador ou aplicativo) durante o processo de handshake TLS (Transport Layer Security) — o protocolo que garante a comunicação segura entre dois sistemas, como seu computador e um site.
+
+Aqui está um resumo do que acontece nessa etapa:
+
+🔐 O que é o Client Hello?
+É uma mensagem enviada pelo cliente para iniciar uma conexão segura. Ela contém:
+
+Versão do protocolo TLS que o cliente suporta.
+Lista de algoritmos de criptografia (cipher suites) que o cliente pode usar.
+Dados aleatórios (random bytes) usados para gerar chaves seguras.
+Extensões TLS, como o SNI (Server Name Indication), que informa ao servidor qual domínio o cliente quer acessar (útil em servidores com múltiplos domínios).
+Session ID (opcional), se o cliente quiser retomar uma sessão anterior.
+🔄 O que acontece depois?
+O servidor responde com um Server Hello, escolhendo os parâmetros de segurança.
+O servidor envia seu certificado digital.
+Ambos os lados trocam chaves e finalizam o handshake.
+A comunicação segura começa.
+
+
+ ### Session IDs 
+
 In computer science, a session identifier, session ID or session token is a piece of data that is used in network communications (often over HTTP) to identify a session, a series of related message exchanges. 
 Session identifiers become necessary in cases where the communications infrastructure uses a stateless protocol such as HTTP. 
 	
@@ -247,5 +269,34 @@ Session IDs devem ser:
 Aleatórios e difíceis de adivinhar (para evitar sequestro de sessão).
 Transmitidos com segurança (via HTTPS).
 Expirados após um tempo de inatividade.
+
+### Session Tickets
+
+Instead of session IDs. Session Tickets define a way to resume a TLS session without requiring that the session-specific state is stored at the TLS server.
+When using session tickets, the TLS server stores its session-specific state in a session ticket and sends the session ticket to the TLS client for storing. 
+The client resumes a TLS session by sending the session ticket to the server, and the server resumes the TLS session according to the session-specific state in the ticket. 
+The session ticket is encrypted and authenticated by the server, and the server verifies its validity before using its contents.
+	
+Explicando Session Tickets: 
+	
+	
+Session Tickets são uma forma de retomar uma sessão TLS anterior sem que o servidor precise guardar informações da sessão anterior em sua memória.
+	
+Como funciona o Session Tickets: 
+Cliente inicia uma conexão TLS.
+Servidor gera um Session Ticket, contendo os dados da sessão (como chaves e parâmetros).
+O ticket é criptografado e autenticado pelo servidor.
+O cliente armazena o ticket (geralmente em memória).
+Em uma nova conexão, o cliente envia o ticket de volta ao servidor.
+O servidor valida e descriptografa o ticket, e retoma a sessão com base nas informações contidas nele.
+	
+Segurança:
+O ticket é criptografado com uma chave secreta do servidor.
+O cliente não consegue ler nem modificar o conteúdo do ticket.
+O servidor verifica a validade do ticket antes de usá-lo.
+	
+Eficiência: evita novo handshake completo.
+Escalabilidade: o servidor não precisa manter estado para cada cliente.
+Rapidez: retomada de sessão é mais rápida e consome menos recursos.
 
 
