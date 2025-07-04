@@ -177,6 +177,8 @@ O certificado é válido, emitido por uma autoridade confiável e corresponde ao
  
 O servidor aceitou usar HTTP/2, que é mais eficiente que HTTP/1.1.
 
+---
+
 
 
 
