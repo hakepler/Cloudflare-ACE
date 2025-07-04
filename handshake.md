@@ -218,7 +218,34 @@ O certificado é válido, emitido por uma autoridade confiável e corresponde ao
 O servidor aceitou usar HTTP/2, que é mais eficiente que HTTP/1.1.
 
 ---
+# Extensões TLS: 
+	
+| Session IDs |
+In computer science, a session identifier, session ID or session token is a piece of data that is used in network communications (often over HTTP) to identify a session, a series of related message exchanges. 
+Session identifiers become necessary in cases where the communications infrastructure uses a stateless protocol such as HTTP. 
+	
+Explicando Session IDs:
+Um Session ID (ou identificador de sessão) é um código único que um servidor gera e atribui a um cliente (como um navegador) para identificar uma sessão específica de comunicação.
+O protocolo HTTP, usado na web, é stateless — ou seja, não guarda memória entre uma requisição e outra. Cada vez que você acessa uma página, o servidor não sabe automaticamente quem você é ou o que você fez antes.
+É aí que entra o Session ID: ele cria uma “memória” temporária entre cliente e servidor.
+	
+1.Você acessa um site (ex: faz login).
+2.O servidor gera um Session ID único (ex: abc123xyz) e o envia para o navegador.
+3.Esse ID é armazenado no navegador (geralmente em um cookie).
+4.Em cada nova requisição, o navegador envia esse ID de volta.
+5.O servidor usa esse ID para recuperar os dados da sua sessão (como seu nome, carrinho de compras, preferências etc.).
+	
+🧪 Exemplo prático
+Imagine que você entra em um site de compras:
 
+Você adiciona um item ao carrinho.
+O servidor associa esse item ao seu Session ID.
+Mesmo que você vá para outra página, o servidor sabe que aquele carrinho é seu, porque o Session ID continua sendo enviado.
+	
+Session IDs devem ser:
 
+Aleatórios e difíceis de adivinhar (para evitar sequestro de sessão).
+Transmitidos com segurança (via HTTPS).
+Expirados após um tempo de inatividade.
 
 
