@@ -413,11 +413,54 @@ Escolhe a cipher suite que também suporta.
 Usa o Client Random + Server Random para gerar a chave de sessão.
 Responde com um ServerHello contendo:
 	
- 	A cipher suite escolhida
+ 	1. A cipher suite escolhida
  
-	Seu próprio número aleatório
+	2. Seu próprio número aleatório
 	
- 	Seu certificado digital
+ 	3. Seu certificado digital
 
-	E outras informações
+	4. outras informações
+
+### 🧩 Componentes de uma Cipher Suite
+ 
+Uma cipher suite geralmente inclui quatro partes principais:
+Algoritmo de troca de chaves
+
+Ex: ECDHE, RSA
+Define como cliente e servidor trocam chaves de forma segura.
+Algoritmo de autenticação
+
+Ex: RSA, ECDSA
+Verifica a identidade do servidor (e opcionalmente do cliente).
+Algoritmo de criptografia simétrica
+
+Ex: AES_256_GCM, ChaCha20
+Criptografa os dados transmitidos após o handshake.
+Algoritmo de integridade (MAC)
+
+Ex: SHA256, SHA384
+Garante que os dados não foram alterados.
+
+## Client Key Exchange
+	
+Validação do Certificado
+O cliente verifica se o certificado do servidor:
+		
+  É confiável (está na trust store)
+  Está dentro do período de validade
+  Não foi revogado pela autoridade certificadora (CA)
+
+O cliente envia um segredo (ou parâmetros para derivá-lo) que será usado para gerar a chave de sessão. Em TLS 1.3, isso é feito com chaves efêmeras (ECDHE), e essa etapa pode estar embutida no ClientHello.
+	
+Finished (Cliente)
+O cliente envia uma mensagem criptografada com um código de autenticação (MAC) para confirmar que o handshake foi bem-sucedido do seu lado.
+	
+Finished (Servidor)
+O servidor envia sua própria mensagem Finished, confirmando que tudo está certo do lado dele.
+	
+	1. Client Hello
+	2. Server Hello
+	3. Client Key Exchange
+	4. Change Cipher Spec
+
 
