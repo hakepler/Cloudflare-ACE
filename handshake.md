@@ -172,7 +172,7 @@ Chave pública efêmera
 
 Confirmação do protocolo via ALPN
 					 
-## Envio do certificado
+### Envio do certificado
 
 	TLSv1.3 (IN), TLS handshake, Certificate (11):
  
@@ -183,7 +183,7 @@ Período de validade
 Autoridade certificadora (CA)
 Chave pública
 					 
-## Verificação e finalização
+### Verificação e finalização
 
 	TLSv1.3 (IN), TLS handshake, CERT verify (15):
 	TLSv1.3 (IN), TLS handshake, Finished (20):
@@ -191,7 +191,7 @@ Chave pública
  
 Ambos os lados trocam mensagens "Finished" para confirmar que a troca de chaves e a autenticação foram bem-sucedidas.
 						
-## Conexão segura estabelecida
+### Conexão segura estabelecida
 
 	SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
  
@@ -201,7 +201,7 @@ TLS 1.3
 	
 Cipher suite: AES de 256 bits em modo GCM com SHA-384
 					 
-## Certificado validado
+### Certificado validado
 
 	Server certificate:
 	subject: CN=jamieede.com
@@ -210,7 +210,7 @@ Cipher suite: AES de 256 bits em modo GCM com SHA-384
   	
 O certificado é válido, emitido por uma autoridade confiável e corresponde ao domínio acessado.
 
-## Protocolo HTTP/2 ativado
+### Protocolo HTTP/2 ativado
 
 	ALPN: server accepted h2
 	using HTTP/2
